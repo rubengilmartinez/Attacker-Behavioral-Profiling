@@ -1,7 +1,7 @@
 # Attacker Behavioral Profiling in SSH Honeypots
 
 This project develops a complete behavioral profiling framework for SSH attackers using raw Cowrie honeypot logs.  
-Through large-scale preprocessing, behavioral feature engineering, and a multi-density clustering algorithm, the system identifies distinct attacker profiles such as automated bots, IoT-like malware, script kiddies, and skilled human operators.
+Through large-scale preprocessing, feature engineering, and a multi-density clustering algorithm, the system identifies distinct attacker profiles such as automated bots or human operators but it is not the key information which the system provides us, with a deep analysis of the different clusters we have been able to identify not only the profile of the attackers but also their intention in each session.
 
 The project is fully reproducible end-to-end through the provided Jupyter notebooks.
 
@@ -16,14 +16,17 @@ The project is fully reproducible end-to-end through the provided Jupyter notebo
     ├── DATASETS/
     │ ├── cleaned_parquet_datasets/ # Reduced sample datasets (Parquet)
     │ └── raw_dataset/ # Small sample of raw files used for testing
-    │
+        └── attacker_behavioral_profiles_dataset_3.0.csv
+        └── attacker_profiles_FINAL_DATASET.csv # Final session-level feature matrix
+        └── executed_commands.csv # For a depper analysis
     ├── images_reports/ # Figures generated during experimentation
+    │
+    ├── gifs_reports/ # Animations generated during experimentation
     │
     ├── notebooks/
       ├── data_cleaning_pipeline.ipynb # Full preprocessing pipeline
       ├── unsupervised_approach.ipynb # K-Means and baseline exploration
       ├── hdbscan_advanced_final_algorithm.ipynb # Multi-density DBSCAN method
-      └── attacker_profiles_FINAL_DATASET.csv # Final session-level feature matrix
 
 
 
@@ -42,6 +45,7 @@ This project requires **Python 3.12** and the following libraries:
 - scikit-learn  
 - matplotlib  
 - seaborn  
+- plotly
 
 (Any standard Python environment with these packages is sufficient.)
 
@@ -59,8 +63,9 @@ All notebooks are **fully executable end-to-end**.
    - Reconstructs sessions  
 
 2. **`unsupervised_approach.ipynb`**  
-   - K-Means exploratory clustering  
    - Seed-based heuristic labeling  
+   - K-Means exploratory clustering  
+   
 
 3. **`hdbscan_advanced_final_algorithm.ipynb`**  
    - Multi-density DBSCAN (Levels 1–3)  
@@ -79,7 +84,7 @@ All resulting datasets and cluster labels are exported inside the `notebooks/` f
             ↓
     Session Reconstruction (per-session timelines)
             ↓
-    Behavioral Feature Engineering
+    Feature Engineering
             ↓
     Iterative DBSCAN Clustering (Levels 1–3)
             ↓
@@ -93,11 +98,12 @@ All resulting datasets and cluster labels are exported inside the `notebooks/` f
 
 ## 🔍 Key Findings
 
-- Automated bots represent the **majority** of SSH traffic, forming large and extremely dense clusters.  
-- IoT-like malware appears as **secondary medium-density clusters**, with simpler yet repetitive behavior patterns.  
-- Script kiddies exhibit **irregular timing, frequent errors, and low command diversity**, placing them in low-density regions.  
-- Skilled operators appear as **small clusters or isolated outliers**, showing deep reconnaissance, purposeful navigation, and minimal errors.  
-- The **multi-density clustering approach** reveals behavioral structures that single-density methods cannot capture.
+Based on the final distribution of attacker behavioral groups:
+
+- **Massive Automated Bots** dominate, accounting for the majority of all SSH intrusion attempts.
+- **IoT/Mirai-like Bots** form the second-largest category, highlighting the prevalence of IoT-targeted malware activity.
+- **Medium-density and semi-human patterns** (e.g., Script Kiddies) appear only in small, infrequent clusters.
+- **Skilled Human Operators** and **Anomalous Outliers** are extremely rare but remain highly significant from a security and threat-analysis standpoint.
 
 ---
 
@@ -107,7 +113,7 @@ All resulting datasets and cluster labels are exported inside the `notebooks/` f
 - **Session-level feature matrix**  
 - Final **cluster labels** for every attacker session  
 - Multiple figures summarizing behavioral groups  
-- Complete academic report (not included in this repo)
+- Complete academic report (included in this repo)
 
 ---
 
